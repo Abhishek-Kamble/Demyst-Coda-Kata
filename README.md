@@ -12,7 +12,7 @@ The system consists of the following:
 
 The backend would integrate with third-party providers such as:
 
-**Decision engine (Ass) -** This is where the final application will be submitted to present the outcome of the application.
+**Decision engine -** This is where the final application will be submitted to present the outcome of the application.
 
 **Accounting software -** providers will provide a balance sheet for a selected business of the user.
 
