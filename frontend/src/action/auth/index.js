@@ -1,7 +1,11 @@
-import { signIn } from "../../api";
+import { signIn, signUp } from "../../api";
 
 export const signin = async (email, password) => {
   const data = signIn({ email: email, password: password });
-  // console.log(data);
+  return data;
+};
+
+export const signup = async (formData) => {
+  const data = signUp(formData);
   return data;
 };

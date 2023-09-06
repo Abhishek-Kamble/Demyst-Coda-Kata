@@ -44,6 +44,8 @@ const Header = () => {
     navigate("/sign-in");
 
     setUser(null);
+
+    setIsLoggedIn(false);
   };
 
   useEffect(() => {
@@ -52,7 +54,14 @@ const Header = () => {
     if (token) {
       const decodedToken = decode(token);
 
-      if (decodedToken.exp * 1000 < new Date().getTime()) logout();
+      if (decodedToken.exp * 1000 < new Date().getTime()) {
+        setIsLoggedIn(false);
+        logout();
+      }
+    }
+
+    if (token) {
+      setIsLoggedIn(true);
     }
 
     setUser(JSON.parse(localStorage.getItem("profile")));
@@ -167,7 +176,7 @@ const Header = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar src={user?.result.name.charAt(0)} />
               </IconButton>
             </Tooltip>
             <Menu

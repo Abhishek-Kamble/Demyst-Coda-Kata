@@ -10,8 +10,8 @@ function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary">
       {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="http://localhost:3000">
+        Demyst Data Solutions
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -29,7 +29,7 @@ const Footer = () => {
         sx={{
           display: "flex",
           flexDirection: "column",
-          minHeight: "100vh",
+          minHeight: "60vh",
         }}
       >
         <CssBaseline />
@@ -38,7 +38,7 @@ const Footer = () => {
           component="footer"
           sx={{
             py: 3,
-            px: 2,
+            px: 3,
             mt: "auto",
             backgroundColor: (theme) =>
               theme.palette.mode === "light"
@@ -46,9 +46,9 @@ const Footer = () => {
                 : theme.palette.grey[800],
           }}
         >
-          <Container maxWidth="sm">
+          <Container maxWidth="sm" sx={{ width: "75%", margin: "auto" }}>
             <Typography variant="body1">
-              My sticky footer can be found here.
+              Designed and developed by Abhishek
             </Typography>
             <Copyright />
           </Container>

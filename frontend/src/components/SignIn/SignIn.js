@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { WEB_URL } from "../../utils/constants";
 import { signin } from "../../action/auth";
 import { useNavigate } from "react-router-dom";
+
 function Copyright(props) {
   return (
     <Typography
@@ -25,7 +26,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href={WEB_URL}>
-        Your Website
+        Demyst Data Solutions
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -37,13 +38,19 @@ const defaultTheme = createTheme();
 
 const SignIn = () => {
   const navigation = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const user = await signin(data.get("email"), data.get("password"));
     if (user) {
-      localStorage.setItem("profile", JSON.stringify(user.data));
-      navigation("/dashboard");
+      if (user.status === 200) {
+        localStorage.setItem("profile", JSON.stringify(user.data));
+        navigation("/dashboard");
+      } else {
+        alert("Invalid credentials");
+        navigation("/sign-in");
+      }
     }
   };
 
@@ -78,6 +85,7 @@ const SignIn = () => {
               id="email"
               label="Email Address"
               name="email"
+              type="email"
               autoComplete="email"
               autoFocus
             />
@@ -103,6 +111,7 @@ const SignIn = () => {
             >
               Sign In
             </Button>
+
             <Grid container>
               <Grid item>
                 <Link href={WEB_URL + "/sign-up"} variant="body2">

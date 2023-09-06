@@ -14,6 +14,8 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { WEB_URL } from "../../utils/constants";
+import { signup } from "../../action/auth";
+import { useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -25,7 +27,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href={WEB_URL}>
-        Your Website
+        Demyst Data Solutions
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -33,14 +35,13 @@ function Copyright(props) {
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
-
 const defaultTheme = createTheme();
 
-export default function SignUp(router) {
+const SignUp = () => {
+  const navigate = useNavigate();
   const [userRegistration, setUserRegistration] = useState({
-    businessName: "",
-    establishedYear: "",
+    name: "",
+    establishYear: "",
     email: "",
     password: "",
   });
@@ -48,18 +49,20 @@ export default function SignUp(router) {
   const handleInput = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-    console.log(name, value);
     setUserRegistration({ ...userRegistration, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // const data = new FormData(event.currentTarget);
     const newRecord = {
       ...userRegistration,
       id: new Date().getTime().toString(),
     };
-    console.log("new record created ", newRecord);
+    const user = await signup(newRecord);
+    if (user) {
+      localStorage.setItem("profile", JSON.stringify(user.data));
+      navigate("/dashboard");
+    }
   };
 
   const d = new Date();
@@ -93,29 +96,29 @@ export default function SignUp(router) {
               <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
-                  name="businessName"
+                  name="name"
                   required
                   fullWidth
-                  id="businessName"
+                  id="name"
                   label="Business Name"
                   autoFocus
                   onChange={handleInput}
-                  value={userRegistration.businessName}
+                  value={userRegistration.name}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="establishedYear"
+                  id="establishYear"
                   label="Established Year"
-                  name="establishedYear"
+                  name="establishYear"
                   autoComplete="establish-year"
                   type="number"
                   min="1800"
                   max={year}
                   onChange={handleInput}
-                  value={userRegistration.establishedYear}
+                  value={userRegistration.establishYear}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -173,4 +176,6 @@ export default function SignUp(router) {
       </Container>
     </ThemeProvider>
   );
-}
+};
+
+export default SignUp;

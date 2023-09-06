@@ -1,10 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import {
-  RouterProvider,
-  createBrowserRouter,
-  Navigate,
-} from "react-router-dom";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./index.css";
 import App from "./App";
 import SignIn from "./components/SignIn/SignIn";
@@ -13,8 +9,6 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import BalanceSheet from "./components/BalanceSheet/BalanceSheet";
 import Outcome from "./components/Outcome/Outcome";
 import Error from "./components/Error/Error";
-
-const user = await JSON.parse(localStorage.getItem("profile"));
 
 const appRouter = createBrowserRouter([
   {
@@ -39,11 +33,11 @@ const appRouter = createBrowserRouter([
       },
       {
         path: "/dashboard",
-        element: user ? <Dashboard /> : <Navigate to="/sign-in" />,
+        element: <Dashboard />,
       },
       {
         path: "/outcome",
-        element: user ? <Outcome /> : <Navigate to="/sign-in" />,
+        element: <Outcome />,
       },
     ],
 

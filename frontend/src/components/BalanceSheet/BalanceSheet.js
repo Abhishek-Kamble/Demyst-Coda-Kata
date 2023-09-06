@@ -39,28 +39,30 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const BalanceSheet = () => {
   const navigation = useNavigate();
   const location = useLocation();
-
   const [isChecked, setIsChecked] = useState(false);
-  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+  const user = JSON.parse(localStorage.getItem("profile"));
+  let sheet = location?.state?.sheet;
 
   useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("profile")));
+    if (!user) {
+      navigation("/sign-in");
+    } else {
+      if (!sheet) {
+        navigation("/dashboard");
+      }
+    }
   }, []);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
 
-  const sheet = location.state.sheet;
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log("SUBMITTED");
     const loanAmount = location.state.loanAmount;
 
     const response = await submitApplication({ sheet, loanAmount });
-
-    console.log(response);
 
     const { applicationDetails } = response.data;
 
@@ -71,12 +73,16 @@ const BalanceSheet = () => {
 
   return (
     <Box component="form" noValidate onSubmit={handleSubmit}>
+      <Typography
+        marginY={2}
+        component="h1"
+        variant="h5"
+        sx={{ width: "75%", mx: "auto" }}
+      >
+        Hi {user?.result?.name}, Here is your balance sheet from{" "}
+        {location?.state?.accountSoftwareName}
+      </Typography>
       <TableContainer sx={{ width: "75%", margin: "auto" }} component={Paper}>
-        <Typography marginY={2} component="h1" variant="h5">
-          Hi {user?.result.name}, Here is your balance sheet from{" "}
-          {location.state.accountSoftwareName};
-        </Typography>
-
         <Table sx={{ minWidth: 700 }} aria-label="balance sheet">
           <TableHead>
             <TableRow>
@@ -87,7 +93,7 @@ const BalanceSheet = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sheet.map((row) => (
+            {sheet?.map((row) => (
               <StyledTableRow key={row.month + row.assetsValue}>
                 <StyledTableCell component="th" scope="row">
                   {row.year}
@@ -103,35 +109,36 @@ const BalanceSheet = () => {
             ))}
           </TableBody>
         </Table>
-
-        <Typography marginY={2} component="h3" variant="h5">
-          Loan amount: ₹ {location.state.loanAmount}
-        </Typography>
       </TableContainer>
 
-      <Grid item xs={6}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              value="allowExtraEmails"
-              color="primary"
-              onChange={handleCheckboxChange}
-            />
-          }
-          label="I agree terms and conditions."
-        />
-      </Grid>
+      <div style={{ width: "75%", margin: "auto" }}>
+        <Typography marginY={2} component="h4" variant="h5">
+          Loan amount: ₹ {location?.state?.loanAmount}
+        </Typography>
+        <Grid item xs={6}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                value="allowExtraEmails"
+                color="primary"
+                onChange={handleCheckboxChange}
+              />
+            }
+            label="I agree terms and conditions."
+          />
+        </Grid>
 
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        sx={{ mt: 3, mb: 2 }}
-        disabled={!isChecked}
-        onSubmit={handleSubmit}
-      >
-        Review & Submit
-      </Button>
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          sx={{ mt: 3, mb: 2 }}
+          disabled={!isChecked}
+          onSubmit={handleSubmit}
+        >
+          Review & Submit
+        </Button>
+      </div>
     </Box>
   );
 };

@@ -15,7 +15,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import { useNavigate } from "react-router-dom";
 
-const Dashboard = (props) => {
+const Dashboard = () => {
   const navigation = useNavigate();
   const defaultTheme = createTheme();
   const [accountSoftwareName, setAccountSoftwareName] = useState("");
@@ -23,7 +23,12 @@ const Dashboard = (props) => {
   const [isChecked, setIsChecked] = useState(false);
   const [loanAmount, setLoanAmount] = useState("");
 
+  const user = JSON.parse(localStorage.getItem("profile"));
   useEffect(() => {
+    if (!user) {
+      navigation("/sign-in");
+    }
+
     const fetchAccountList = async () => {
       const accountList = await getAccountList();
       setAccountList(accountList);
@@ -77,50 +82,76 @@ const Dashboard = (props) => {
             onSubmit={handleSubmit}
             sx={{ mt: 3 }}
           >
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="loanAmount"
-                label="Loan Amount"
-                name="loanAmount"
-                autoComplete="loan-amount"
-                type="number"
-                value={loanAmount}
-                onChange={handleNumericInputChange}
-              />
-            </Grid>
-            <FormControl fullWidth margin="5px">
-              <InputLabel id="demo-simple-select-label">
-                Choose accounting software
-              </InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={accountSoftwareName}
-                label="accountList"
-                onChange={(e) => {
-                  setAccountSoftwareName(e.target.value);
-                }}
-              >
-                {accountList?.map((ele, index) => (
-                  <MenuItem key={index} value={ele.softName}>
-                    {ele.softName}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    value="allowExtraEmails"
-                    color="primary"
-                    onChange={handleCheckboxChange}
-                  />
-                }
-                label="I agree terms and conditions."
-              />
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="businessName"
+                  label="Business Name"
+                  name="businessName"
+                  value={user?.result?.name}
+                  disabled={true}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="establishedYear"
+                  label="Established Year"
+                  name="establishedYear"
+                  value={user?.result?.establishYear}
+                  disabled={true}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="loanAmount"
+                  label="Loan Amount"
+                  name="loanAmount"
+                  autoComplete="loan-amount"
+                  type="number"
+                  value={loanAmount}
+                  onChange={handleNumericInputChange}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel id="select-acc-soft">
+                    Choose accounting software
+                  </InputLabel>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={accountSoftwareName}
+                    label="accountList"
+                    onChange={(e) => {
+                      setAccountSoftwareName(e.target.value);
+                    }}
+                  >
+                    {accountList?.map((ele, index) => (
+                      <MenuItem key={index} value={ele.softName}>
+                        {ele.softName}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      value="allowExtraEmails"
+                      color="primary"
+                      onChange={handleCheckboxChange}
+                    />
+                  }
+                  label="I agree terms and conditions."
+                />
+              </Grid>
             </Grid>
             <Button
               type="submit"
