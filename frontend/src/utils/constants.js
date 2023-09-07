@@ -1,3 +1,3 @@
-export const WEB_URL = "http://localhost:3000";
+export const WEB_URL = "https://main.d2fjra279l8rvx.amplifyapp.com/";
 
-export const SERVER_URL = "http://localhost:5000";
+export const SERVER_URL = "https://code-kata-api.onrender.com";

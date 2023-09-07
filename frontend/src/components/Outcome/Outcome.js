@@ -6,8 +6,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useLocation } from "react-router-dom";
-import { Button, Grid } from "@mui/material";
-import { Link } from "react-router-dom";
 
 const Outcome = () => {
   const location = useLocation();
